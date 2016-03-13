@@ -1,0 +1,26 @@
+name: GuildWorldManager
+version: 1.0.0
+author: ReanKR
+main: org.whitehack97.GuildWorldManager.GuildWorldManager
+description: No Description.
+commands:
+  GuildWorldManager.Main:
+    description: Main Commands.
+    aliases: [g, guild, gwmanager, guildworldmanager]
+
+permissions:
+  guildworldmanager.*:
+    description: No Description.
+    default: OP
+  guildworldmanager.bypass:
+    description: No Description.
+    default: false
+  guildworldmanager.set.world:
+    description: No Description.
+    default: false
+  guildworldmanager.set.whitelist:
+    description: No Description.
+    default: false
+  guildworldmanager.set.blacklist:
+    description: No Description.
+    default: false
