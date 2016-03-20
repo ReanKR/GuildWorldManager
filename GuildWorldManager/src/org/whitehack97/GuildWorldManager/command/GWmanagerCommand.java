@@ -16,6 +16,7 @@ import org.whitehack97.GuildWorldManager.GuildWorldManager;
 import org.whitehack97.GuildWorldManager.Util.FileReader;
 import org.whitehack97.GuildWorldManager.Util.MessageManager;
 import org.whitehack97.GuildWorldManager.api.ManagePlayer;
+import org.whitehack97.GuildWorldManager.player.GuildInformation;
 import org.whitehack97.GuildWorldManager.player.PlayerInformation;
 
 import com.massivecraft.factions.Rel;
@@ -308,16 +309,28 @@ public class GWmanagerCommand implements CommandExecutor
 													{
 														try
 														{
-															World world = Bukkit.getServer().getWorld(args[3]);
 															File file = new File("plugins/GuildWorldManager/Players/" + args[2] + ".yml");
-															YamlConfiguration PlayerSection = FileReader.LoadPlayerFile(p);
+															if(!file.exists())
+															{
+																MessageManager.msg(p, "&c오류: &4해당 플레이어 정보가 없습니다.");
+																return false;
+															}
+															World world = Bukkit.getServer().getWorld(args[3]);
+															YamlConfiguration PlayerSection = YamlConfiguration.loadConfiguration(file);
 															PlayerSection.set("World.Faction-World", world.getName());
 															FileReader.SaveFile(PlayerSection, file);
-															MessageManager.msg(p, "&a" + args[2] + "님에게 월드 " + world.getName() + "의 사용 권한을 정상적으로 부여했습니다.");
+															boolean Passed = GuildInformation.RegisterGuild(args[2]);
+															if(Passed) MessageManager.msg(p, "&a" + args[2] + "님에게 월드 " + world.getName() + "의 사용 권한을 정상적으로 부여했습니다.");
+															else
+															{
+																MessageManager.msg(p, "&b해당 플레이어에게 월드 권한을 임시 부여했습니다.");
+																MessageManager.msg(p, "&b플레이어가 접속한다면 월드 소유가 정상 등록될 것입니다.");
+															}
 															return true;
 														}
 														catch(NullPointerException e)
 														{
+															e.printStackTrace();
 															MessageManager.msg(p, "&c오류: &4기입한 월드가 이 서버에 없습니다.");
 															return false;
 														}

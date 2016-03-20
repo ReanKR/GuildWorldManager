@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.whitehack97.GuildWorldManager.Util.FileReader;
 import org.whitehack97.GuildWorldManager.Util.MessageManager;
 import org.whitehack97.GuildWorldManager.player.GuildInformation;
+import org.whitehack97.GuildWorldManager.player.PlayerInformation;
 
 import com.massivecraft.factions.entity.MPlayer;
 
@@ -52,7 +53,6 @@ public class PlayerListener implements Listener
 							}
 						}
 					}
-					
 					if(MPlayer.get(player).getFaction().getName().equalsIgnoreCase(Str))
 					{
 						return;
@@ -94,6 +94,7 @@ public class PlayerListener implements Listener
 	{
 		Player player = e.getPlayer();
 		FileReader.LoadPlayerFile(player);
+		PlayerInformation.LoadPlayerFile(player);
 		GuildInformation.RegisterGuild(player);
 	}
 }

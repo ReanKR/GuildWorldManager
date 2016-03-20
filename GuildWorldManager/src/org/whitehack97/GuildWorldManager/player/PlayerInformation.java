@@ -49,6 +49,7 @@ public class PlayerInformation
 		}
 // **************************************************************************
 		GuildWorldManager.PlayerInformations.put(player.getName(), new ManagePlayer(player)); // 플레이어 정보를 플러그인 내부에 저장
+		GuildInformation.RegisterGuild(player);
 		return;
 	}
 

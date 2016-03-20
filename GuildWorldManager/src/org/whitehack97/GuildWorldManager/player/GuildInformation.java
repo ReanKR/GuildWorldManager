@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.whitehack97.GuildWorldManager.GuildWorldManager;
@@ -15,12 +16,50 @@ import com.massivecraft.factions.entity.MPlayer;
 
 public class GuildInformation
 {
+	@Deprecated
+	public static boolean RegisterGuild(String PlayerName)
+	{
+		Player player = Bukkit.getServer().getOfflinePlayer(PlayerName).getPlayer();
+		if(Bukkit.getServer().getOfflinePlayer(PlayerName).isOnline())
+		{
+			PlayerInformation.LoadPlayerFile(player);
+		}
+		MPlayer mplayer = MPlayer.get(player);
+		try
+		{
+			if(mplayer.hasFaction())
+			{
+				RegisterGuild(mplayer.getPlayer());
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		catch(NullPointerException e)
+		{
+			return false;
+		}
+	}
 	public static void RegisterGuild(Player player)
 	{
 		MPlayer mplayer = MPlayer.get(player);
-		Faction faction = mplayer.getFaction();
-		if(faction == null)
+		Faction faction;
+		try
 		{
+			faction = mplayer.getFaction();
+			if(faction == null)
+			{
+				return;
+			}
+		}
+		catch(NullPointerException e)
+		{
+			if(player.hasPlayedBefore() && player.isOnline())
+			{
+				PlayerInformation.LoadPlayerFile(player);
+			}
 			return;
 		}
 
