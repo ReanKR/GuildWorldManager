@@ -27,11 +27,11 @@ public class PlayerListener implements Listener
 		YamlConfiguration GuildSection = YamlConfiguration.loadConfiguration(file);
 		for(String Str : GuildSection.getKeys(false))
 		{
-			if(! ToWorld.equals(e.getFrom().getWorld()) && ToWorld.getName().equalsIgnoreCase(GuildSection.getString(Str + ".World")))
+			if(! ToWorld.equals(e.getPlayer().getWorld()) && ToWorld.getName().equalsIgnoreCase(GuildSection.getString(Str + ".World")))
 			{
 				if(player.getName().equalsIgnoreCase(GuildSection.getString(Str + ".Leader")))
 				{
-					return;
+					continue;
 				}
 				else
 				{
@@ -48,14 +48,14 @@ public class PlayerListener implements Listener
 									MessageManager.msg(player, "&c오류:&4 이동에 실패하였습니다.");
 									MessageManager.msg(player, "&6가려는 월드는 길드 월드이면서 해당 길드가 해당 플레이어를 블랙리스트로 지정함");
 									e.setCancelled(true);
-									return;
+									continue;
 								}
 							}
 						}
 					}
 					if(MPlayer.get(player).getFaction().getName().equalsIgnoreCase(Str))
 					{
-						return;
+						continue;
 					}
 					
 					if(LeaderSection.getBoolean("World.Whitelist.Enabled"))
@@ -66,7 +66,7 @@ public class PlayerListener implements Listener
 							{
 								if(Name.equalsIgnoreCase(player.getName()))
 								{
-									return;
+									continue;
 								}
 							}
 						}
@@ -74,7 +74,7 @@ public class PlayerListener implements Listener
 					
 					if(LeaderSection.getBoolean("World.World-Passed"))
 					{
-						return;
+						continue;
 					}
 				}
 				MessageManager.msg(player, "&c오류:&4 이동에 실패하였습니다.");
@@ -84,7 +84,7 @@ public class PlayerListener implements Listener
 			}
 			else
 			{
-				return;
+				continue;
 			}
 		}
 	}

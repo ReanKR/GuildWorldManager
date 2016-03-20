@@ -1,6 +1,7 @@
 package org.whitehack97.GuildWorldManager.command;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.whitehack97.GuildWorldManager.Util.MessageManager;
 import org.whitehack97.GuildWorldManager.api.ManagePlayer;
 import org.whitehack97.GuildWorldManager.player.GuildInformation;
 import org.whitehack97.GuildWorldManager.player.PlayerInformation;
+import org.whitehack97.rWorldGUI.config.InventoryConfig;
 
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.Faction;
@@ -245,7 +247,7 @@ public class GWmanagerCommand implements CommandExecutor
 										YamlConfiguration LeaderSection = FileReader.LoadPlayerFile(p);
 										if(!LeaderSection.contains("World.Location"))
 										{
-											LeaderSection.createSection("World.Faction-World.Location");
+											LeaderSection.createSection("World.Location");
 										}
 										LeaderSection.set("World.Location.X", location.getX());
 										LeaderSection.set("World.Location.Y", location.getY());
@@ -254,6 +256,31 @@ public class GWmanagerCommand implements CommandExecutor
 										LeaderSection.set("World.Location.Pitch", location.getPitch());
 										FileReader.SaveFile(LeaderSection, file);
 										PlayerInformation.LoadPlayerFile(p);
+										MessageManager.msg(p, "&a현재 서있는 위치를 길드 기본 스폰 위치로 지정하였습니다.");
+										File guildFile = new File("plugins/rWorldGUI/guildworld.yml");
+										if(guildFile.exists())
+										{
+											YamlConfiguration GuildSection = YamlConfiguration.loadConfiguration(guildFile);
+											if(GuildSection.contains(Mplayer.getFactionWorld()))
+											{
+												MessageManager.msg(p, "&arWorldGUI에서 길드 월드의 정보를 읽고 있습니다.");
+												GuildSection.set(Mplayer.getFactionWorld()+ ".LOCATION.X", location.getX());
+												GuildSection.set(Mplayer.getFactionWorld()+ ".LOCATION.Y", location.getY());
+												GuildSection.set(Mplayer.getFactionWorld()+ ".LOCATION.Z", location.getZ());
+												GuildSection.set(Mplayer.getFactionWorld()+ ".LOCATION.YAW", location.getYaw());
+												GuildSection.set(Mplayer.getFactionWorld()+ ".LOCATION.PITCH", location.getPitch());
+												try
+												{
+													GuildSection.save(guildFile);
+													InventoryConfig.InventoryLoad();
+													MessageManager.msg(p, "&arWorldGUI에서 스폰 위치의 정보를 정상적으로 변경하였습니다.");
+												}
+												catch (IOException e)
+												{
+													e.printStackTrace();
+												}
+											}
+										}
 										return true;
 									}
 									else
